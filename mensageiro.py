@@ -24,6 +24,33 @@ def receber_msgs():
     print("Aguardando conexão para receber mensagens")
 
     # aceita a conexão quando o outro computador esiver pronto
-    conn, addr, server = server_socket.accept()
+    conn, addr = server_socket.accept()
     print(f"Conectado com {addr}")
-    
+
+    # recebe mensagens 
+    while True:
+        mensagem = conn.recv(1024).decode()
+        if mensagem.lower() == 'fui-me':
+            print("O outro usuário encerrou a conexão.")
+            break
+        # adiciona a mensagem recebida na fila
+        mensagens_recebidas.put(f"=={mensagem}")
+    conn.close()
+    server_socket.close()
+
+# função para enviar mensagens
+def enviar_msg():
+    # cria um socket para enviar mensagens
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    #tenta conectar com o outro computador
+    while True:
+        try:
+            client_socket.connect((ip_destino, port))
+            printf("Conectado. Pronto para enviar mensagens.")
+            break
+        except ConnectionRefusedError:
+            print("O outro usuáio não está pronto. Tentando em 3 segundos")
+            time.sleep(3)
+            
+    # loop para envio de mensagens
