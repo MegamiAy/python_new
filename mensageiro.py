@@ -15,7 +15,7 @@ port = 12345
 mensgens_recebidas = queue.Queue()
 
 # função para receber as mensagens e coloca-lás na fila
-def receber_msgs():
+def receber_msg():
     # configura a sockert para conversar com a camada de transporte
     # para receber as mensagens
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,3 +54,25 @@ def enviar_msg():
             time.sleep(3)
             
     # loop para envio de mensagens
+    while True:
+        mensagem = input(': ')
+        client_socket.send(mensagem.enconde())
+        if mensagem.lower() == 'fui-me'
+            break
+        
+    client_socket.close()
+
+# função para exibir as msg da fila
+def exibir_msg():
+    while True:
+        while not mensagens_recebidas.empty()
+            # imprime cada mensagem da fila
+            print(mensagens_recebidas.get())
+        # aguarda o intevalo de tempo para verificar a fila novamente
+        time.sleep(0.1)
+
+# executa as funções de receber, enviar e exibir as mensagens
+# ao mesmo tempo
+threading.Thread(target=receber_msg, deamon=True).start()
+threading.Thread(target=enviar_msg).start()
+threading.Thread(target=exibir_msg, deamon=True).start()
